@@ -1,22 +1,22 @@
-import poblacion,sys
+import poblacion, cromosoma, sys
 
-class GeneticAlgorithm:
+class Genetico:
 
     #constructor
-    def __init__(self, proba_mutacion=.001, max_iterations = 1000000):
+    def __init__(self, proba_mutacion, max_iteraciones):
         self.proba_mutacion = proba_mutacion
-        self.max_iterations = max_iterations
+        self.max_iteraciones = max_iteraciones
 
-    def buscar_solucion(self, poblacion):
-        print "probabilidad de mutacion: {} iteraciones maximas: {}".format(self.proba_mutacion,self.max_iterations)
+    def buscarSolucion(self, poblacion):
+        print "probabilidad de mutacion: {} iteraciones maximas: {}".format(self.proba_mutacion,self.max_iteraciones)
 
-        for i in range(self.max_iterations):
-            poblacion = poblacion.breed(self.proba_mutacion)
+        for i in range(self.max_iteraciones):
+            poblacion = poblacion.cruzar(self.proba_mutacion)
 
             # imprime poblaciones
             print poblacion
             
-            if poblacion[0].cost == 0:
+            if poblacion[0].costo == 0:
                 print "{} cruzas".format(i)
                 return poblacion[0]
 
@@ -36,7 +36,7 @@ def imprimeTablero(poblacion, tamano):
     print "\n----------------TABLERO----------------\n"
     for x in poblacion:
         a[x][w] = "R"
-        w=w+1
+        w += 1
 
     for h in a:
         fila = '  '.join(h)
@@ -47,18 +47,19 @@ def imprimeTablero(poblacion, tamano):
 
 import sys
 def valores(argv):
-    params = {'proba_mutacion':.001, 'max_iterations':1000000, 'nqueens':8,'poblacion_size':10}
+    params = {'proba_mutacion':.001, 'max_iteraciones':1000, 'num_reinas':8,'tam_poblacion':10}
 
     return params
 
+
+#main
 if __name__ == "__main__":
     parameters = valores(sys.argv[1:])
 
-    poblacion = poblacion.Poblacion(parameters['nqueens'],parameters['poblacion_size'])
-    g = GeneticAlgorithm(parameters['proba_mutacion'], parameters['max_iterations'])
+    poblacion = poblacion.Poblacion(parameters['num_reinas'],parameters['tam_poblacion'])
+    g = Genetico(parameters['proba_mutacion'], parameters['max_iteraciones'])
 
-    #imprime tablero
-    resultado = g.buscar_solucion(poblacion)
-    imprimeTablero(resultado,parameters['nqueens'])
+    resultado = g.buscarSolucion(poblacion)
+    imprimeTablero(resultado,parameters['num_reinas'])
 
    
