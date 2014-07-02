@@ -2,9 +2,10 @@ import random
 
 #individuos
 class Cromosoma:
-    def __init__(self, sequence):
-        self.cromosoma = sequence
+    def __init__(self, secuencia):
+        self.cromosoma = secuencia
         self.costo = self.obtenerCosto()
+
     def __str__(self):
         return "{} Costo: {}".format(self.cromosoma, self.costo)
 
@@ -12,20 +13,21 @@ class Cromosoma:
     def __repr__(self):
         return str(self.cromosoma)
     #compara
-    def __cmp__(self, other):
-        return self.costo.__cmp__(other.costo)
+    def __cmp__(self, otro):
+        return self.costo.__cmp__(otro.costo)
 
     def __len__(self):
         return len(self.cromosoma)
 
+    #getter/setter
     def __getitem__(self, indice):
         return self.cromosoma[indice]
 
-    def __setitem__(self, indice, value):
-        self.cromosoma[indice] = value
+    def __setitem__(self, indice, valor):
+        self.cromosoma[indice] = valor
 
     @classmethod
-    def fromParents(cls, padre, madre):
+    def parejas(cls, padre, madre):
         val = -1
         if (len(padre) != len(madre)):
             return "Error"
@@ -64,6 +66,7 @@ class Cromosoma:
     @classmethod
     def random(cls, num_reinas):
         cromosoma = [i for i in range(num_reinas)]
+        #desordena la lista
         random.shuffle(cromosoma)
         return cls(cromosoma)
 
@@ -72,7 +75,7 @@ class Cromosoma:
         costo = 0
         
         for i in range(len(self.cromosoma)):
-            print "----"
+            #print "----"
             costo += self.cromosoma.count(self.cromosoma[i]) - 1
             costo += self.obtenerCostoDiagonal(i)
         return costo
@@ -82,27 +85,30 @@ class Cromosoma:
         for i in range(len(self.cromosoma)):
             #evita que de 0 
             if (i != indice):
-                print "indice   :",indice
-                print "valor i  :", i
+                #print "indice   :",indice
+                #print "valor i  :", i
                 # posicion del cromosoma - indice
                 delta_x = abs(indice - i)
-                print "delta_x",delta_x
+                #print "delta_x",delta_x
 
                 #valor posicion actual - el resto de los cromosomas
                 delta_y = abs(self.cromosoma[indice] - self.cromosoma[i])
-                print "cromosoma indice",self.cromosoma[indice]
-                print "cromosoma i", self.cromosoma[i]
-                print "delta_y",delta_y
+                #print "cromosoma indice",self.cromosoma[indice]
+                #print "cromosoma i", self.cromosoma[i]
+                #print "delta_y",delta_y
                 if (delta_x == delta_y):
                     costo = costo + 1
         return costo
 
     #si el random es menor a proba_mutacion entonces cambia el valor
     def mutar(self, proba_mutacion):
-        if (random.random() < proba_mutacion):
-            indiceOne = random.randint(0, len(self) - 1)
-            indiceTwo = random.randint(0, len(self) - 1)
-            temp = self.cromosoma[indiceOne]
-            self.cromosoma[indiceOne] = self.cromosoma[indiceTwo]
-            self.cromosoma[indiceTwo] = temp
+        if (random.randint(0,100) < proba_mutacion):
+            print "MUTO!!!"
+            indiceUno = random.randint(0, len(self) - 1)
+            indiceDos = random.randint(0, len(self) - 1)
+            print "antes de mutar       ", self.cromosoma
+            temp = self.cromosoma[indiceUno]
+            self.cromosoma[indiceUno] = self.cromosoma[indiceDos]
+            self.cromosoma[indiceDos] = temp
+            print "despues de mutar     ", self.cromosoma
 

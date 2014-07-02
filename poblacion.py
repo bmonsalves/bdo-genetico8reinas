@@ -14,6 +14,7 @@ class Poblacion:
     def __len__(self):
         return len(self.poblacion)
 
+    #getter/setter
     def __getitem__(self, index):
         return self.poblacion[index]
 
@@ -27,21 +28,21 @@ class Poblacion:
 
 
     def cruzar(self, proba_mutacion):
-        #toma 3 poblaciones y las ordena por costo
-        touny = random.sample(self, 3)
-        print "touny", touny
-        touny.sort()
-        #envia las 2 poblaciones de menor costo
-        new_c = cromosoma.Cromosoma.fromParents(touny[0], touny[1])
-        new_c.mutar(proba_mutacion)
+        #toma 3 individuos y las ordena por costo
+        trio = random.sample(self, 3)
+        print "trio", trio
+        trio.sort()
+        #envia las 2 individuos de menor costo
+        hijo = cromosoma.Cromosoma.parejas(trio[0], trio[1])
+        hijo.mutar(proba_mutacion)
 
-        self.matar(new_c, touny[2])
+        self.matar(hijo, trio[2])
         return self
 
     #reemplaza el nuevo individuo por el de mayor costo
-    def matar(self, new_c, old_c):
-        self.poblacion.append(new_c)
-        self.poblacion.remove(old_c)
+    def matar(self, hijo, no_apto):
+        self.poblacion.append(hijo)
+        self.poblacion.remove(no_apto)
         self.poblacion.sort()
 
     def sort(self):
